@@ -1,0 +1,18 @@
+host:
+    ip: 0.0.0.0
+    port: "9090"
+logs:
+    level: info
+    path: ./logs/logrus.log
+
+dir:
+    root: "/home"
+    tmp: "/tmp"
+
+user:
+    root:
+        mod: "root"
+        password: "root"
+    default:
+        mod: "default"
+        password: "123456"

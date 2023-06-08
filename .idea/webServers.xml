@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="26adfa21-aac8-4fbb-8b04-4f4c26566811" name="Linux">
+        <fileTransfer rootFolder="/home/anubis/go-test" accessType="SFTP" host="100.76.246.116" port="22" sshConfigId="2313da94-5dae-419e-8486-aceae79948f5" sshConfig="垃圾服务器" authAgent="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
