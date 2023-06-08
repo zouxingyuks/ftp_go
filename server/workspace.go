@@ -5,12 +5,12 @@ import (
 	"net"
 )
 
-type workSpace struct {
-	commondConn net.Conn
-	dataConn    net.Conn
-	reader      *bufio.Reader
-	usr         string
+type WorkSpace struct {
+	CommandConn net.Conn
+	DataConn    net.Conn
+	Reader      *bufio.Reader
+	Usr         string
 	//相对路径
-	dir          string
-	transferType string
+	Dir          string
+	TransferType string
 }

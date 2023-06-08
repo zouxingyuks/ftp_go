@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-type CommandHandlerFunc func(dialog *workSpace, command string, arguments []string) []byte
+type CommandHandlerFunc func(dialog *WorkSpace, command string, arguments []string) []byte
 
 var serverLogs *logrus.Entry
 
@@ -68,11 +68,11 @@ func handleMonitoring() {
 // 处理客户端连接
 func handleClient(conn net.Conn) {
 	defer conn.Close()
-	dialog := &workSpace{
-		commondConn:  conn,
-		reader:       bufio.NewReader(conn),
-		dir:          "",
-		transferType: "",
+	dialog := &WorkSpace{
+		CommandConn:  conn,
+		Reader:       bufio.NewReader(conn),
+		Dir:          "",
+		TransferType: "",
 	}
 	// 验证登录
 	err := authenticate(dialog)
@@ -86,27 +86,27 @@ func handleClient(conn net.Conn) {
 }
 
 // 验证登录
-func authenticate(dialog *workSpace) error {
+func authenticate(dialog *WorkSpace) error {
 	// 向客户端发送登录提示
-	_, err := dialog.commondConn.Write([]byte("220 Please enter your username:\r\n"))
+	_, err := dialog.CommandConn.Write([]byte("220 Please enter your username:\r\n"))
 	if err != nil {
 		return err
 	}
 	// 读取客户端的用户名
-	username, err := dialog.reader.ReadString('\n')
+	username, err := dialog.Reader.ReadString('\n')
 	if err != nil {
 		return err
 	}
 	username = strings.TrimSpace(username)
 
 	// 向客户端发送进一步验证的提示
-	_, err = dialog.commondConn.Write([]byte("331 Please enter your password:\r\n"))
+	_, err = dialog.CommandConn.Write([]byte("331 Please enter your password:\r\n"))
 	if err != nil {
 		return err
 	}
 
 	// 读取客户端的密码
-	password, err := dialog.reader.ReadString('\n')
+	password, err := dialog.Reader.ReadString('\n')
 	if err != nil {
 		return err
 	}
@@ -116,7 +116,7 @@ func authenticate(dialog *workSpace) error {
 	// 执行登录验证逻辑
 	if !checkCredentials(username, password, dialog) {
 		// 登录验证失败，向客户端发送错误消息并关闭连接
-		_, err = dialog.commondConn.Write([]byte("530 Login incorrect.\r\n"))
+		_, err = dialog.CommandConn.Write([]byte("530 Login incorrect.\r\n"))
 		if err != nil {
 			return err
 		}
@@ -124,7 +124,7 @@ func authenticate(dialog *workSpace) error {
 	}
 
 	// 登录验证成功，向客户端发送登录成功的消息
-	_, err = dialog.commondConn.Write([]byte("230 Login successful.\r\n"))
+	_, err = dialog.CommandConn.Write([]byte("230 Login successful.\r\n"))
 	if err != nil {
 		return err
 	}
@@ -133,25 +133,25 @@ func authenticate(dialog *workSpace) error {
 }
 
 // 检查用户名和密码
-func checkCredentials(username, password string, dialog *workSpace) bool {
+func checkCredentials(username, password string, dialog *WorkSpace) bool {
 	// 在这里进行实际的用户名和密码验证逻辑
 	// 例如，从数据库或配置文件中验证用户凭据
 
 	// 假设用户名为 "admin"，密码为 "password"
 	// 这里只是一个示例，你需要根据实际情况进行修改
 	if username == "admin" && password == "password" {
-		//dialog.usr = username
-		dialog.usr = "anubis"
+		//dialog.Usr = username
+		dialog.Usr = "anubis"
 		return true
 	}
 
 	return false
 }
 
-func handleConn(dialog *workSpace, handlerFunc CommandHandlerFunc) {
+func handleConn(dialog *WorkSpace, handlerFunc CommandHandlerFunc) {
 	for {
 		// 读取客户端命令
-		cmdBytes, err := dialog.reader.ReadString('\n')
+		cmdBytes, err := dialog.Reader.ReadString('\n')
 		if err != nil {
 			fmt.Println("读取命令失败：", err)
 			break
@@ -164,7 +164,7 @@ func handleConn(dialog *workSpace, handlerFunc CommandHandlerFunc) {
 		arguments := tokens[1:]
 		// 处理客户端命令
 		response := handlerFunc(dialog, command, arguments)
-		sendResponse(dialog.commondConn, response, dialog.transferType)
+		sendResponse(dialog.CommandConn, response, dialog.TransferType)
 
 	}
 }

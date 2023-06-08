@@ -12,7 +12,7 @@ import (
 
 // 处理客户端命令
 
-func processCommand(dialog *workSpace, command string, arguments []string) []byte {
+func processCommand(dialog *WorkSpace, command string, arguments []string) []byte {
 	switch command {
 	case "AUTH":
 		//todo 待实现
@@ -38,12 +38,12 @@ func processCommand(dialog *workSpace, command string, arguments []string) []byt
 		switch transferType {
 		case "A", "ASCII":
 			// 设置传输类型为 ASCII
-			dialog.transferType = "ASCII"
+			dialog.TransferType = "ASCII"
 			return []byte("200 Type set to ASCII.\r\n")
 
 		case "I", "BINARY":
 			// 设置传输类型为 binary
-			dialog.transferType = "BINARY"
+			dialog.TransferType = "BINARY"
 			return []byte("200 Type set to binary.\r\n")
 
 		default:
@@ -57,8 +57,8 @@ func processCommand(dialog *workSpace, command string, arguments []string) []byt
 	case "PWD":
 		//todo 设置基准路径
 		// PWD 命令，返回当前工作目录路径
-		//dir := config.Configs.GetString("dir.root") + "/" + dialog.usr + dialog.dir
-		dir := "/" + dialog.dir
+		//Dir := config.Configs.GetString("Dir.root") + "/" + dialog.Usr + dialog.Dir
+		dir := "/" + dialog.Dir
 		response := fmt.Sprintf("257 \"%s\" is the current directory.\r\n", dir)
 		return []byte(response)
 	case "CWD":
@@ -69,11 +69,11 @@ func processCommand(dialog *workSpace, command string, arguments []string) []byt
 		// 获取客户端传递的目录参数
 		fmt.Println("cwd :", arguments[0])
 		if arguments[0] == "/" {
-			dialog.dir = ""
+			dialog.Dir = ""
 			return []byte("250 Directory successfully changed.\r\n")
 		}
-		dir := dialog.dir + "/" + arguments[0]
-		dialog.dir = dir
+		dir := dialog.Dir + "/" + arguments[0]
+		dialog.Dir = dir
 		// 返回成功响应给客户端
 		return []byte("250 Directory successfully changed.\r\n")
 
@@ -96,11 +96,11 @@ func processCommand(dialog *workSpace, command string, arguments []string) []byt
 		if err != nil {
 			return []byte(fmt.Sprintf("500 Failed to establish data connection: %s\r\n", err))
 		}
-		dialog.dataConn = dataConn
+		dialog.DataConn = dataConn
 		return []byte("200 Data connection established.\r\n")
 	case "CDUP":
 		// CDUP 命令，将当前工作目录切换到父级目录
-		dialog.dir = filepath.Dir(dialog.dir)
+		dialog.Dir = filepath.Dir(dialog.Dir)
 		// 返回成功响应给客户端
 		return []byte("200 OK\r\n")
 	case "RETR":
@@ -121,31 +121,31 @@ func processCommand(dialog *workSpace, command string, arguments []string) []byt
 		if err != nil {
 			return []byte(fmt.Sprintf("500 Failed to establish data connection: %s\r\n", err))
 		}
-		dialog.dataConn = dataConn
+		dialog.DataConn = dataConn
 		return []byte("200 Data connection established.\r\n")
 
 	case "LIST":
 		// 列出文件列表的命令
-		dir := dialog.dir
-		//todo dir 应该是默认为当前工作目录
+		dir := dialog.Dir
+		//todo Dir 应该是默认为当前工作目录
 		if len(arguments) > 0 {
 			dir = arguments[0]
 		}
-		dir = config.Configs.GetString("dir.root") + "/" + dialog.usr + dir
-		fmt.Println("list dir: ", dir)
+		dir = config.Configs.GetString("Dir.root") + "/" + dialog.Usr + dir
+		fmt.Println("list Dir: ", dir)
 		cmd := exec.Command("bash", "-c", fmt.Sprintf("ls -l %s | tail -n +2", dir))
 		output, err := cmd.Output()
 		if err != nil {
 			fmt.Println(err)
-			sendResponse(dialog.commondConn, []byte("500 List Error\r\n"), dialog.transferType) // 发送错误响应给客户端
+			sendResponse(dialog.CommandConn, []byte("500 List Error\r\n"), dialog.TransferType) // 发送错误响应给客户端
 			return nil
 		}
 
 		// 发送成功的响应给客户端
-		sendResponse(dialog.commondConn, []byte("200 List OK\r\n"), dialog.transferType)
-		sendResponse(dialog.dataConn, append(output, []byte("\r\n")...), dialog.transferType) // 发送文件列表数据给客户端
+		sendResponse(dialog.CommandConn, []byte("200 List OK\r\n"), dialog.TransferType)
+		sendResponse(dialog.DataConn, append(output, []byte("\r\n")...), dialog.TransferType) // 发送文件列表数据给客户端
 		//todo  不知道对不对
-		dialog.dataConn.Close()
+		dialog.DataConn.Close()
 		return nil
 
 	default:
