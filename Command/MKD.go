@@ -17,6 +17,8 @@ func handleMKD(dialog *models.WorkSpace, arguments []string) []byte {
 
 	// 验证权限逻辑
 	if !checkPermissions(dialog, Path) {
+		//低权限用户危险操作报警
+		dialog.Logs.Warnln("Try to create " + Path + " but permission denied.")
 		return []byte("550 Permission denied.\r\n")
 	}
 
@@ -25,24 +27,19 @@ func handleMKD(dialog *models.WorkSpace, arguments []string) []byte {
 		return []byte("550 Directory already exists.\r\n")
 	}
 	// 执行创建目录操作
-	err := createDirectory(filepath.Join(dialog.BasicDir, Path))
+	err := createDir(filepath.Join(dialog.BasicDir, Path))
 	if err != nil {
 		// 创建目录失败，返回错误消息
+		dialog.Logs.Warnln("Try to create "+Path+" but failed. err:", err)
 		return []byte(fmt.Sprintf("550 Failed to create directory: %s\r\n", err))
 	}
 
 	// 目录创建成功，返回成功消息
+	dialog.Logs.Infoln("Directory " + Path + " created.")
 	return []byte("257 Directory created\r\n")
 }
 
-func createDirectory(directoryPath string) error {
-	// 在这里实现创建目录的逻辑
-	// 可以使用操作系统或存储系统的API来创建目录
-
+func createDir(directoryPath string) error {
 	err := os.Mkdir(directoryPath, 0777) // 设置目录的权限为777，根据需要进行调整
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
