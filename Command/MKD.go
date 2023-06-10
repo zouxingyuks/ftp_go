@@ -24,13 +24,14 @@ func handleMKD(dialog *models.WorkSpace, arguments []string) []byte {
 
 	// 检查目录是否已存在
 	if _, err := os.Stat(filepath.Join(dialog.BasicDir, Path)); !os.IsNotExist(err) {
+		dialog.Logs.Errorln("Try to create " + Path + " but it already exists.")
 		return []byte("550 Directory already exists.\r\n")
 	}
 	// 执行创建目录操作
 	err := createDir(filepath.Join(dialog.BasicDir, Path))
 	if err != nil {
 		// 创建目录失败，返回错误消息
-		dialog.Logs.Warnln("Try to create "+Path+" but failed. err:", err)
+		dialog.Logs.Errorln("Try to create "+Path+" but failed. err:", err)
 		return []byte(fmt.Sprintf("550 Failed to create directory: %s\r\n", err))
 	}
 
