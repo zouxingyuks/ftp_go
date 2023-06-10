@@ -14,7 +14,6 @@ func HandleList(dialog *models.WorkSpace, arguments []string) []byte {
 		dir = arguments[0]
 	}
 	dir = filepath.Join(dialog.BasicDir, dir)
-	fmt.Println("list dir: ", dir)
 	cmd := exec.Command("bash", "-c", fmt.Sprintf("ls -l %s | tail -n +2", dir))
 	output, err := cmd.Output()
 	formatoutput := formatFileList(string(output))

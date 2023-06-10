@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 )
 
-func HandleCDUP(dialog *models.WorkSpace) []byte {
+func handleCDUP(dialog *models.WorkSpace) []byte {
 	if dialog.Dir == "/" {
 		// 已经在根目录，无法再上升，返回错误
 		return []byte("550 Can't change directory\r\n")

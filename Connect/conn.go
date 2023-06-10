@@ -3,6 +3,7 @@ package Connect
 import (
 	"bufio"
 	"ftp_go/Command"
+	"ftp_go/config"
 	"ftp_go/models"
 	"net"
 )
@@ -14,12 +15,12 @@ func HandleClient(conn net.Conn) {
 		CommandConn:  conn,
 		Reader:       bufio.NewReader(conn),
 		Dir:          "/",
-		BasicDir:     "/home/anubis",
+		BasicDir:     config.Configs.GetString("dir.root"),
 		TransferType: "",
 		Status:       false,
 	}
 	dialog.CommandConn.Write([]byte("220 Please enter your username:\r\n"))
-	Command.Handle(dialog, Command.Process)
+	Command.Handle(dialog)
 	// 处理客户端请求
 
 }

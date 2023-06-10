@@ -7,12 +7,14 @@ logs:
 
 dir:
   root: "/home"
-  tmp: "/tmp"
-
+key: "123"
 user:
   root:
-    mod: "root"
+    permission: "root"
     password: "root"
   default:
-    mod: "default"
+    permission: "default"
     password: "123456"
+  anubis:
+    permission: "root"
+    password: "password"

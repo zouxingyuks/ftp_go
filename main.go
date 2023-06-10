@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"ftp_go/Command"
 	"ftp_go/Connect"
 	"ftp_go/config"
 	"github.com/sirupsen/logrus"
@@ -16,6 +17,7 @@ func init() {
 	config.ParseConfig()
 	// 创建服务日志
 	serverLogs = config.NewLog("server")
+	Command.Logs = config.NewLog("command")
 }
 
 func Start() {

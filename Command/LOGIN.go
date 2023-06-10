@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func HandleUSER(dialog *models.WorkSpace, arguments []string) []byte {
+func handleUSER(dialog *models.WorkSpace, arguments []string) []byte {
 	username := arguments[0]
 	//判断用户是否存在
 	if !config.Configs.IsSet("user." + username) {
@@ -17,7 +17,7 @@ func HandleUSER(dialog *models.WorkSpace, arguments []string) []byte {
 	dialog.Usr = username
 	return []byte("331 User OK\r\n")
 }
-func HandlePASS(dialog *models.WorkSpace, arguments []string) []byte {
+func handlePASS(dialog *models.WorkSpace, arguments []string) []byte {
 	password := arguments[0]
 	if !checkCredentials(dialog.Usr, password) || dialog.Usr == "" {
 		// 登录验证失败，向客户端发送错误消息并关闭连接
