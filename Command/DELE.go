@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func HandleDELE(dialog *models.WorkSpace, arguments []string) []byte {
+func handleDELE(dialog *models.WorkSpace, arguments []string) []byte {
 	// 获取要删除的文件路径
 	Path := filepath.Join(dialog.BasicDir, dialog.Dir, arguments[0])
 	// 检查新的工作目录是否存在

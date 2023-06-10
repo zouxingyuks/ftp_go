@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func HandleRNTO(dialog *models.WorkSpace, arguments []string) []byte {
+func handleRNTO(dialog *models.WorkSpace, arguments []string) []byte {
 	// 检查是否已经执行过 RNFR 命令
 	if dialog.RNFR == "" {
 		return []byte("503 Bad sequence of commands.\r\n")

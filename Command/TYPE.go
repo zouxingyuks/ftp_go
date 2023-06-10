@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func HandleTYPE(dialog *models.WorkSpace, arguments []string) []byte {
+func handleTYPE(dialog *models.WorkSpace, arguments []string) []byte {
 	// TYPE 命令，设置传输类型
 	if len(arguments) < 1 {
 		return []byte("500 TYPE command requires an argument.\r\n")

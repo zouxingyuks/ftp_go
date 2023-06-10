@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-func HandleList(dialog *models.WorkSpace, arguments []string) []byte {
+func handleList(dialog *models.WorkSpace, arguments []string) []byte {
 	dir := dialog.Dir
 	if len(arguments) > 0 {
 		dir = arguments[0]

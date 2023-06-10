@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-func HandleRETR(dialog *models.WorkSpace, filename string) []byte {
+func handleRETR(dialog *models.WorkSpace, filename string) []byte {
 	// 构建完整的文件路径
 	path := filepath.Join(dialog.BasicDir, dialog.Dir, filename)
 	fmt.Println("download:", path)

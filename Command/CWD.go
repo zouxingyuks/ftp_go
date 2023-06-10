@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func HandleCWD(dialog *models.WorkSpace, arguments []string) []byte {
+func handleCWD(dialog *models.WorkSpace, arguments []string) []byte {
 	if len(arguments) < 1 {
 		return []byte("500 CWD command requires a directory argument.\r\n")
 	}

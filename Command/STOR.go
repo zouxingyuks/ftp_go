@@ -8,7 +8,7 @@ import (
 	"syscall"
 )
 
-func HandleSTOR(dialog *models.WorkSpace, arguments []string) []byte {
+func handleSTOR(dialog *models.WorkSpace, arguments []string) []byte {
 	Response.Send(dialog.CommandConn, []byte("150 Opening data connection.\r\n"), dialog.TransferType)
 	// 从数据连接中读取数据
 	dataConn := dialog.DataConn

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func HandlePORT(dialog *models.WorkSpace, arguments []string) []byte {
+func handlePORT(dialog *models.WorkSpace, arguments []string) []byte {
 	if len(arguments) < 1 {
 		return []byte("500 PORT command requires an argument.\r\n")
 	}

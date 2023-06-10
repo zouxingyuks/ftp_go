@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func HandleEPRT(dialog *models.WorkSpace, arguments []string) []byte {
+func handleEPRT(dialog *models.WorkSpace, arguments []string) []byte {
 	// EPRT 命令，客户端指定数据连接地址和端口（IPv4或IPv6）
 	if len(arguments) < 1 {
 		return []byte("500 EPRT command requires an argument.\r\n")

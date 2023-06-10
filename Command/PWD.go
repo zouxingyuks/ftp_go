@@ -5,7 +5,7 @@ import (
 	"ftp_go/models"
 )
 
-func HandlePWD(dialog *models.WorkSpace) []byte {
+func handlePWD(dialog *models.WorkSpace) []byte {
 	//todo 设置基准路径
 	// PWD 命令，返回当前工作目录路径
 	dir := dialog.Dir

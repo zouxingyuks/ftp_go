@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func HandleRNFR(dialog *models.WorkSpace, arguments []string) []byte {
+func handleRNFR(dialog *models.WorkSpace, arguments []string) []byte {
 	if len(arguments) < 1 {
 		return []byte("500 RNFR command requires a file argument.\r\n")
 	}

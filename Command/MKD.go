@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func HandleMKD(dialog *models.WorkSpace, arguments []string) []byte {
+func handleMKD(dialog *models.WorkSpace, arguments []string) []byte {
 	if len(arguments) < 1 {
 		return []byte("501 Missing directory name.\r\n")
 	}
