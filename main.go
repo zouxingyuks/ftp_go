@@ -63,5 +63,6 @@ func HandleMonitoring() {
 }
 
 func main() {
+	config.Configs.WatchConfig()
 	Start()
 }
