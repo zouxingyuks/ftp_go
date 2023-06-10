@@ -15,11 +15,13 @@ func HandlePORT(dialog *models.WorkSpace, arguments []string) []byte {
 	// 解析客户端指定的数据连接地址和端口
 	address, err := parsePortAddress(arguments[0])
 	if err != nil {
+		Logs.Warnln("Failed to parse PORT argument: ", err)
 		return []byte(fmt.Sprintf("500 Failed to parse PORT argument: %s\r\n", err))
 	}
 	// 建立数据连接
 	dataConn, err := net.Dial("tcp", address)
 	if err != nil {
+		Logs.Warnln("Failed to establish data connection: ", err)
 		return []byte(fmt.Sprintf("500 Failed to establish data connection: %s\r\n", err))
 	}
 	dialog.DataConn = dataConn
