@@ -25,7 +25,7 @@ func HandlePASS(dialog *models.WorkSpace, arguments []string) []byte {
 
 	}
 	dialog.Status = true
-	dialog.Dir = filepath.Join(dialog.Dir, dialog.Usr)
+	dialog.BasicDir = filepath.Join(dialog.BasicDir, dialog.Usr)
 	return []byte("230 Login successful.\r\n")
 
 }
