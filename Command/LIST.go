@@ -14,16 +14,19 @@ func handleList(dialog *models.WorkSpace, arguments []string) []byte {
 		dir = arguments[0]
 	}
 	dir = filepath.Join(dialog.BasicDir, dir)
+	//todo 使用更加通用的方式
 	cmd := exec.Command("bash", "-c", fmt.Sprintf("ls -l %s | tail -n +2", dir))
 	output, err := cmd.Output()
-	formatoutput := formatFileList(string(output))
+	formatOutput := formatFileList(string(output))
 	if err != nil {
-		fmt.Println(err)
+		dialog.Logs.Errorln("List "+dir+" failed. err:", err)
 		Response.Send(dialog.CommandConn, []byte("500 List Error\r\n"), dialog.TransferType)
 		return nil
 	}
-	Response.Send(dialog.DataConn, append([]byte(formatoutput), []byte("\r\n")...), dialog.TransferType)
+	Response.Send(dialog.DataConn, append([]byte(formatOutput), []byte("\r\n")...), dialog.TransferType)
 	dialog.DataConn.Close()
+	dialog.Logs.Infoln("DataConn closed.")
+	dialog.Logs.Infoln("List " + dir + " success.")
 	return []byte("200 List OK\r\n")
 }
 
