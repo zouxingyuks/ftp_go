@@ -2,6 +2,7 @@ package models
 
 import (
 	"bufio"
+	"github.com/sirupsen/logrus"
 	"net"
 )
 
@@ -16,4 +17,5 @@ type WorkSpace struct {
 	Dir          string
 	BasicDir     string
 	TransferType string
+	Logs         *logrus.Entry
 }
