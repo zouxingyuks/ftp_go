@@ -12,7 +12,7 @@ import (
 func HandleRETR(dialog *models.WorkSpace, filename string) []byte {
 	// 构建完整的文件路径
 	path := filepath.Join(dialog.BasicDir, dialog.Dir, filename)
-
+	fmt.Println("download:", path)
 	// 检查文件是否存在
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		// 文件不存在，返回错误
