@@ -2,24 +2,32 @@ package Command
 
 import (
 	"fmt"
+	"ftp_go/Cryption"
+	"ftp_go/config"
 	"ftp_go/models"
+	"path/filepath"
 	"strings"
 )
 
 func HandleUSER(dialog *models.WorkSpace, arguments []string) []byte {
 	username := arguments[0]
-	//todo 验证逻辑：用户名是否存在
+	//判断用户是否存在
+	if !config.Configs.IsSet("user." + username) {
+		return []byte("530 Login incorrect.\r\n")
+	}
+	//验证通过
 	dialog.Usr = username
 	return []byte("331 User OK\r\n")
 }
 func HandlePASS(dialog *models.WorkSpace, arguments []string) []byte {
 	password := arguments[0]
-	if !checkCredentials(dialog.Usr, password) {
+	if !checkCredentials(dialog.Usr, password) || dialog.Usr == "" {
 		// 登录验证失败，向客户端发送错误消息并关闭连接
 		return []byte("530 Login incorrect.\r\n")
 
 	}
 	dialog.Status = true
+	dialog.Dir = filepath.Join(dialog.Dir, dialog.Usr)
 	return []byte("230 Login successful.\r\n")
 
 }
@@ -73,14 +81,7 @@ func Authenticate(dialog *models.WorkSpace) error {
 
 // 检查用户名和密码
 func checkCredentials(username, password string) bool {
-	// todo 设置校验逻辑
-	// 在这里进行实际的用户名和密码验证逻辑
-	// 例如，从数据库或配置文件中验证用户凭据
-
-	// 假设用户名为 "admin"，密码为 "password"
-	// 这里只是一个示例，你需要根据实际情况进行修改
-	if username == "admin" && password == "password" {
-		//dialog.Usr = username
+	if password == Cryption.Decode(config.Configs.GetString("user."+username+".password"), config.Configs.GetString("user."+username+".key")) {
 		return true
 	}
 
